@@ -27,3 +27,8 @@ class Contenedor {
 }
 
 const programa = new Contenedor()
+
+const prueba = require('./modulo.js')
+
+
+console.log(prueba.prueba())
