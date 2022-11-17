@@ -1,29 +1,84 @@
+const fs = require('fs')
+
 class Contenedor {
-    constructor () {
-        this.productos = []
+    constructor (url) {
+        this.url = url
     }
 
-    save (nombre, precio) {
-        this.productos.push({nombre: nombre, precio: precio, id: this.productos.length+1})
+    
+
+    async getAll(){
+        try {
+            const listado = await this.start() 
+            console.log(listado)
+
+        } catch (error) {
+            return []
+        }
     }
 
-    getAll (){
-        console.log(this.productos)
+   async start(){
+        try {
+            const data = await fs.promises.readFile(this.url, 'utf-8')
+            return JSON.parse(data)
+            
+
+        } catch (error) {
+            return []
+        }
     }
 
-    getById (id){
-        console.log(this.productos.find(item => item.id === id ))
+    async save (obj){
+        // llamo al array 
+        const listado = await this.start() 
+        
+        let nuevoId 
+        
+        if(listado.length == 0){
+            nuevoId = 1
+        }
+        else{
+            nuevoId = listado[listado.length -1].id + 1
+        }
+        
+        // defino el objeto
+        const objeto = {...obj, id:nuevoId }
+
+        // pusheo 
+        listado.push(objeto)
+
+        try {
+            const data = await fs.promises.writeFile(this.url, JSON.stringify(listado, null,2))
+            return nuevoId
+  
+        } catch (error) {
+            
+        }
     }
 
-    deleteById (id){
-        const idParaEliminar = this.productos.findIndex(item => item.id === id)
-        this.productos.splice (idParaEliminar, 1)
-        return this.productos
+
+    async getById (id){
+    const listado = await this.start()
+    console.log(listado.find(item => item.id === id ))
     }
 
-    deleteAll (){
-        this.productos = []
+    async deleteById (id){
+        const listado = await this.start()
+        const idParaEliminar = listado.filter(item => item.id != id)
+        const data = await fs.promises.writeFile(this.url, JSON.stringify(idParaEliminar, null,2))
+
     }
+
+    async deletAll (){
+        const arrayVacio = []
+        try {
+           await fs.promises.writeFile(this.url, JSON.stringify(arrayVacio)) 
+        } catch (error) {
+            throw new Error (error)
+        }
+        
+    }
+ 
 }
 
 module.exports = Contenedor
