@@ -1,7 +1,22 @@
 [
   {
-    "title": "prod",
-    "price": 11,
+    "title": "producto 1",
+    "price": 1141,
     "id": 1
+  },
+    {
+    "title": "producto 2",
+    "price": 1331,
+    "id": 2
+  },
+    {
+    "title": "producto 3",
+    "price": 1541,
+    "id": 3
+  },
+    {
+    "title": "producto 4",
+    "price": 41,
+    "id": 4
   }
 ]

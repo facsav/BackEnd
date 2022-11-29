@@ -9,11 +9,32 @@ class Contenedor {
 
     async getAll(){
         try {
+            const data = await fs.promises.readFile(this.url, 'utf-8')
             const listado = await this.start() 
+            return listado
             console.log(listado)
 
         } catch (error) {
             return []
+        }
+    }
+
+    async getRandom (){
+        try{
+
+            // defino un numero random
+            const listado = await this.start() 
+            let min = 1
+            let max = listado.length
+            const numeroRandom = Math.random()
+            const numero = Math.floor(numeroRandom * (max - min + 1)) + min
+            
+            // le paso como parametro a la funcion get by id el numero random ya que ese seria el id random 
+            return this.getById(numero)
+
+        }
+        catch (error){
+            console.log(error)
         }
     }
 
@@ -60,6 +81,7 @@ class Contenedor {
     async getById (id){
     const listado = await this.start()
     console.log(listado.find(item => item.id === id ))
+    return listado.find(item => item.id === id )
     }
 
     async deleteById (id){
